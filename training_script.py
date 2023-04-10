@@ -93,7 +93,7 @@ def train(training_config):
                 acc_content_loss, acc_style_loss, acc_tv_loss = [0., 0., 0.]
 
             if training_config['checkpoint_freq'] is not None and (batch_id + 1) % training_config['checkpoint_freq'] == 0:
-                training_state = utils.get_training_metadata(training_config) if training_config['write_metadata'] else {}
+                training_state = {}
                 training_state["state_dict"] = transformer_net.state_dict()
                 training_state["optimizer_state"] = optimizer.state_dict()
                 ckpt_model_name = f"ckpt_style_{training_config['style_img_name'].split('.')[0]}_cw_{str(training_config['content_weight'])}_sw_{str(training_config['style_weight'])}_tw_{str(training_config['tv_weight'])}_epoch_{epoch}_batch_{batch_id}.pth"
@@ -139,7 +139,6 @@ if __name__ == "__main__":
     parser.add_argument("--image_log_freq", type=int, help="tensorboard image logging (batch) frequency - enable_tensorboard must be True to use", default=100)
     parser.add_argument("--console_log_freq", type=int, help="logging to output console (batch) frequency", default=500)
     parser.add_argument("--checkpoint_freq", type=int, help="checkpoint model saving (batch) frequency", default=2000)
-    parser.add_argument("--write_metadata", type=bool, help="write metadata when saving checkpoints", default=True)
     args = parser.parse_args()
 
     checkpoints_path = os.path.join(checkpoints_root_path, args.style_img_name.split('.')[0])
